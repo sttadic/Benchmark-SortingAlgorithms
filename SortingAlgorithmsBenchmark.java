@@ -7,6 +7,7 @@ public class SortingAlgorithmsBenchmark {
         return dest;
     }
 
+
     // Method that creates size n array of randomly generated numbers
     public int[] randomArr(int n) {
         int[] array = new int[n];
@@ -56,7 +57,7 @@ public class SortingAlgorithmsBenchmark {
     public void bubbleSort(int[] arr) {
         // Initialize isSorted to act as a flag to track whether swaps have been made in a pass through an array
         boolean isSorted = false;
-        // Store length of an array into variable n
+        // Assign length of the array to a variable n
         int n = arr.length;
 
         while (!isSorted) {
@@ -82,16 +83,16 @@ public class SortingAlgorithmsBenchmark {
     public void selectionSort(int[] arr) {
         // Iterate over an entire array (exclude the last element)
         for (int i = 0; i < arr.length - 1; i++) {
-            // Assume that smallest element is at index 'i'
+            // Assume the smallest element is at index 'i'
             int smallestAtIndex = i;
             // Iterate over the array starting from next element (i + 1)
             for (int j = i + 1; j < arr.length; j++) {
-                // If smaller value is found, store it in smallestAtIndex variable
+                // If smaller value is found, assign it to the smallestAtIndex variable
                 if (arr[j] < arr[smallestAtIndex]) {
                     smallestAtIndex = j;
                 }
             }
-            // If smallestAtIndex has changed (meaning smaller emelent has been found), swap the values
+            // If smallestAtIndex has changed, which means that smaller element has been found, swap the values
             if (smallestAtIndex != i) {
                 int temp = arr[i];
                 arr[i] = arr[smallestAtIndex];
@@ -102,12 +103,42 @@ public class SortingAlgorithmsBenchmark {
 
 
     public void insertionSort(int[] arr) {
-        
+        // Iterate over entire array starting from the second element
+        for (int i = 1; i < arr.length; i++) {
+            // Assign current element's value to a variable key
+            int key = arr[i];
+            // Store index of an element that comes before i in the variable j
+            int j = i - 1;
+
+            // Move elements that come before the key in an array, and are greater than key, to the right
+            while (j >= 0 && arr[j] > key) {
+                arr[j+1] = arr[j];
+                // Step towards the start of the array
+                j--;
+            }
+            // Insert the key into correct position
+            arr[j+1] = key;
+        }
     }
 
+
     public void quickSort(int[] arr) {
+        int i = 1;
+
+        while (i < arr.length) {
+            int j = i;
+
+            while (j > 0 && arr[j-1] > arr[j]) {
+                int temp = arr[j];
+                arr[j] = arr[j-1];
+                arr[j-1] = temp;
+                j--;
+            }
+            i++;
+        }
   
     }
+
 
     public void radixSort(int[] arr) {
   
