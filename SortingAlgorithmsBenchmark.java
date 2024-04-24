@@ -127,19 +127,20 @@ public class SortingAlgorithmsBenchmark {
 
 
 
-    // Helper method for the mergeSort() that merges subarrays. Origin: https://www.geeksforgeeks.org/merge-sort/?ref=header_search
+    // Helper method for the mergeSort() that sorts and merges subarrays. Origin: https://www.geeksforgeeks.org/merge-sort/?ref=header_search
     public void merge(int[] arr, int left, int middle, int right) {
+        
         // Calculate sizes of subarrays
         // Subbary arr[left to middle] - add 1 to include all indices starting form zero up to the middle point (inclusive)
         int n1 = middle - left + 1;
         // Subarray arr[middle+1 to right]
         int n2 = right - middle;
 
-        // Initialize temporary arrays
+        // Initialize temporary (sub)arrays of appropriate sizes calculated above
         int[] leftArr = new int[n1];
         int[] rightArr = new int[n2];
 
-        // Copy to temporary arrays
+        // Copy elements of array to temporary subarrays so they take only elements specified by left, middle or right indexes
         for (int i = 0; i < n1; i++) {
             leftArr[i] = arr[left + i];
         }
@@ -147,16 +148,16 @@ public class SortingAlgorithmsBenchmark {
             rightArr[j] = arr[middle + 1 + j];
         }
 
-        // Merging temporary arrays
-        // Initialize indexes for both subarrays
+        // Initialize variables to track indexes of both temporary subarrays
         int i = 0;
         int j = 0;
-        // Initialize index of merged array
+        // Initialize variable to track indexes of array that was originally passed in to merge() method
         int k = left;
 
-        // Keep iterating until either index reaches end of its array (subarray)
+        // Keep iterating until either index reaches end of its subarray, compare values at given indexes of subarrays
+        // and insert smaller element into arr first (sorting and merging)
         while (i < n1 && j < n2) {
-            // Add smaller element to the array
+            
             if (leftArr[i] <= rightArr[j]) {
                 arr[k] = leftArr[i];
                 i++;
@@ -167,7 +168,7 @@ public class SortingAlgorithmsBenchmark {
             k++;       
         }
 
-        // Add any remaining elements from each subarray
+        // Insert any remaining elements from temporary subarrays - in case leftArr and rightArr were not the same size
         while (i < n1) {
             arr[k] = leftArr[i];
             i++;
@@ -183,13 +184,14 @@ public class SortingAlgorithmsBenchmark {
     // Solution for MergeSort taken from: https://www.geeksforgeeks.org/merge-sort/?ref=header_search
     public void mergeSort(int[] arr, int left, int right) {
         
-        // Base case
+        // Base case - terminate recursive calls once left and right variables (indexes) are equal
         if (left < right) {
 
-            // Calculate middle index
+            // Calculate middle index in a way it prevents integer overflow
             int middle = left + (right - left) / 2;
 
-            // Recursively call mergeSort to divide the array into subarrays
+            // Recursively call mergeSort() with smaller subarrays until base case is reached. After recursive call terminates,
+            // return control to the previous call. After both recursive calls have completed (terminated), proceed to execute merge()
             mergeSort(arr, left, middle);
             mergeSort(arr, middle + 1, right);
 
