@@ -1,6 +1,6 @@
 public class SortingAlgorithmsBenchmark {
     
-    // Method that copies source array
+    // Utility method that copies source array
     public int[] copyArr(int[] src) {
         int[] dest = new int[src.length];
         System.arraycopy(src, 0, dest, 0, src.length);
@@ -8,7 +8,7 @@ public class SortingAlgorithmsBenchmark {
     }
 
 
-    // Method that creates size n array of randomly generated numbers
+    // Utility method to create size n array of randomly generated numbers
     public int[] randomArr(int n) {
         int[] array = new int[n];
         for (int i = 0; i < n; i++) {
@@ -17,29 +17,32 @@ public class SortingAlgorithmsBenchmark {
         return array;
     }
 
-   
+    // Utility and Benchmark methods are slightly modified versions of Dr. Dominic Carr's benchmark example. Source code at:
+    // https://vlegalwaymayo.atu.ie/pluginfile.php/1183960/mod_resource/content/0/Main.java
     public double benchmark(int n, String sort) {
         // Initialize totalTime variable
         double totalTime = 0;
-        // Store randomly generated array of size n into an arr variable
+        // Store randomly generated array of size n to arr variable
         int[] arr = randomArr(n);
 
-        // Iterate over 10 times (10 benchmarks for specific input)
+        // Perform 10 benchmarks for each sorting algorithm
         for (int i = 0; i < 10; i++) {
 
-            // Store the copy of the original array into an arrCopy so sorting algorithm will always work on unsorted array
+            // Store the copy of the original array into an arrCopy so sorting algorithm always works on unsorted arrays
             int[] arrCopy = copyArr(arr);
             // Initialize startTime variable that holds time (since epoch) in nanoseconds
             long startTime = System.nanoTime();
 
-            // Invoke sorting algorithm method based on 'sort' parameter
+            // Invoke sorting algorithm based on a 'sort' parameter. If method is not found, return NaN as an error indicator
             switch (sort) {
                 case "BubbleSort"     -> bubbleSort(arrCopy);
                 case "SelectionSort"  -> selectionSort(arrCopy);
                 case "InsertionSort"  -> insertionSort(arrCopy);                 
-                case "QuickSort"      -> quickSort(arrCopy);
+                case "MergeSort"      -> mergeSort(arrCopy, 0, arrCopy.length-1);
                 case "RadixSort"      -> radixSort(arrCopy);
-                default               -> System.exit(1);
+                default               -> {
+                    return Double.NaN;
+                }
             }
 
             // Store time in nanoseconds after sorting is completed
@@ -81,18 +84,18 @@ public class SortingAlgorithmsBenchmark {
 
 
     public void selectionSort(int[] arr) {
-        // Iterate over an entire array (exclude the last element)
+        // Iterate over an entire array excluding the last element
         for (int i = 0; i < arr.length - 1; i++) {
-            // Assume the smallest element is at index 'i'
+            // Assume the smallest value is at index 'i' and store it in a smallestAtIndex variable
             int smallestAtIndex = i;
             // Iterate over the array starting from next element (i + 1)
             for (int j = i + 1; j < arr.length; j++) {
-                // If smaller value is found, assign it to the smallestAtIndex variable
+                // If smaller value is found, assign its index to the smallestAtIndex variable
                 if (arr[j] < arr[smallestAtIndex]) {
                     smallestAtIndex = j;
                 }
             }
-            // If smallestAtIndex has changed, which means that smaller element has been found, swap the values
+            // If smallestAtIndex has changed, which means that smaller value has been found, swap the values
             if (smallestAtIndex != i) {
                 int temp = arr[i];
                 arr[i] = arr[smallestAtIndex];
@@ -102,42 +105,98 @@ public class SortingAlgorithmsBenchmark {
     }
 
 
+    // Insertion sort algoritham is implemented using psoudocode found at: https://www.baeldung.com/java-insertion-sort
     public void insertionSort(int[] arr) {
         // Iterate over entire array starting from the second element
         for (int i = 1; i < arr.length; i++) {
-            // Assign current element's value to a variable key
+            // Assign current element's value to a variable key 
             int key = arr[i];
-            // Store index of an element that comes before i in the variable j
+            // Store index of an element that comes before i (current element) in the variable j
             int j = i - 1;
 
-            // Move elements that come before the key in an array, and are greater than key, to the right
+            // Move elements that come before and are greater than the key to the right
             while (j >= 0 && arr[j] > key) {
                 arr[j+1] = arr[j];
-                // Step towards the start of the array
+                // Step towards the start of the array so all elements to the left are compared with the key
                 j--;
             }
-            // Insert the key into correct position
+            // Insert the key in front of the elements that have been moved to the right (elements that are larger than the key itself)
             arr[j+1] = key;
         }
     }
 
 
-    public void quickSort(int[] arr) {
-        int i = 1;
 
-        while (i < arr.length) {
-            int j = i;
+    // Helper method for the mergeSort() that merges subarrays. Origin: https://www.geeksforgeeks.org/merge-sort/?ref=header_search
+    public void merge(int[] arr, int left, int middle, int right) {
+        // Calculate sizes of subarrays
+        // Subbary arr[left to middle] - add 1 to include all indices starting form zero up to the middle point (inclusive)
+        int n1 = middle - left + 1;
+        // Subarray arr[middle+1 to right]
+        int n2 = right - middle;
 
-            while (j > 0 && arr[j-1] > arr[j]) {
-                int temp = arr[j];
-                arr[j] = arr[j-1];
-                arr[j-1] = temp;
-                j--;
-            }
-            i++;
+        // Initialize temporary arrays
+        int[] leftArr = new int[n1];
+        int[] rightArr = new int[n2];
+
+        // Copy to temporary arrays
+        for (int i = 0; i < n1; i++) {
+            leftArr[i] = arr[left + i];
         }
-  
+        for (int j = 0; j < n2; j++) {
+            rightArr[j] = arr[middle + 1 + j];
+        }
+
+        // Merging temporary arrays
+        // Initialize indexes for both subarrays
+        int i = 0;
+        int j = 0;
+        // Initialize index of merged array
+        int k = left;
+
+        // Keep iterating until either index reaches end of its array (subarray)
+        while (i < n1 && j < n2) {
+            // Add smaller element to the array
+            if (leftArr[i] <= rightArr[j]) {
+                arr[k] = leftArr[i];
+                i++;
+            } else {
+                arr[k] = rightArr[j];
+                j++;
+            }
+            k++;       
+        }
+
+        // Add any remaining elements from each subarray
+        while (i < n1) {
+            arr[k] = leftArr[i];
+            i++;
+            k++;
+        }
+        while (j < n2) {
+            arr[k] = rightArr[j];
+            j++;
+            k++;
+        }
     }
+
+    // Solution for MergeSort taken from: https://www.geeksforgeeks.org/merge-sort/?ref=header_search
+    public void mergeSort(int[] arr, int left, int right) {
+        
+        // Base case
+        if (left < right) {
+
+            // Calculate middle index
+            int middle = left + (right - left) / 2;
+
+            // Recursively call mergeSort to divide the array into subarrays
+            mergeSort(arr, left, middle);
+            mergeSort(arr, middle + 1, right);
+
+            // Call the helper method to sort and merge subarrays
+            merge(arr, left, middle, right);
+        }
+    }   
 
 
     public void radixSort(int[] arr) {
@@ -152,7 +211,7 @@ public class SortingAlgorithmsBenchmark {
         // Array of input sizes
         int[] sizeArray = {100, 250, 500, 750, 1000, 1250, 2500, 3750, 5000, 6250, 7500, 8750, 10000};
         // Array of strings that represent sorting algorithms
-        String[] algArray = {"BubbleSort", "SelectionSort", "InsertionSort", "QuickSort", "RadixSort"};
+        String[] algArray = {"BubbleSort", "SelectionSort", "InsertionSort", "MergeSort", "RadixSort"};
 
         // Print string "SIZE" and each input size on one line
         // Explanation on how to format with printf() method found at: https://www.baeldung.com/java-printstream-printf
@@ -161,7 +220,7 @@ public class SortingAlgorithmsBenchmark {
             System.out.printf("%-10s", sizeArray[i]);
         }
 
-        // For each sorting algorithm (string) iterate over an array of input sizes and pass these in as parameters to the benchmark() method
+        // For each sorting algorithm (string) iterate over an array of input sizes and pass them in as parameters to the benchmark()
         for (String alg : algArray) {
             System.out.printf("%n%-20s", alg);
             
