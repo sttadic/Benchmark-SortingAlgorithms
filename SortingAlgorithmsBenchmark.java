@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class SortingAlgorithmsBenchmark {
     
     // Utility method that copies source array
@@ -19,7 +17,8 @@ public class SortingAlgorithmsBenchmark {
         return array;
     }
 
-    // Utility and Benchmark methods are slightly modified versions from Dr. Dominic Carr's benchmark example. Source code at:
+    
+    // Utility and Benchmark methods are slightly modified versions of Dr. Dominic Carr's benchmark example. Source code:
     // https://vlegalwaymayo.atu.ie/pluginfile.php/1183960/mod_resource/content/0/Main.java
     public double benchmark(int n, String sort) {
         // Initialize totalTime variable
@@ -59,6 +58,7 @@ public class SortingAlgorithmsBenchmark {
     }
 
 
+    // BUBBLE SORT
     public void bubbleSort(int[] arr) {
         // Initialize isSorted to act as a flag to track whether swaps have been made in a pass through an array
         boolean isSorted = false;
@@ -85,6 +85,7 @@ public class SortingAlgorithmsBenchmark {
     }
 
 
+    // SELECTION SORT
     public void selectionSort(int[] arr) {
         // Iterate over an entire array excluding the last element
         for (int i = 0; i < arr.length - 1; i++) {
@@ -107,7 +108,8 @@ public class SortingAlgorithmsBenchmark {
     }
 
 
-    // Insertion sort algoritham is implemented using psoudocode found at: https://www.baeldung.com/java-insertion-sort
+    // INSERTION SORT 
+    // Algoritham is implemented using psoudocode found at: https://www.baeldung.com/java-insertion-sort
     public void insertionSort(int[] arr) {
         // Iterate over entire array starting from the second element
         for (int i = 1; i < arr.length; i++) {
@@ -128,8 +130,8 @@ public class SortingAlgorithmsBenchmark {
     }
 
 
-
-    // Helper method for the mergeSort() that sorts and merges subarrays. Origin: https://www.geeksforgeeks.org/merge-sort/?ref=header_search
+    // MERGE SORT helper method that sorts and merges subarrays
+    // Source: https://www.geeksforgeeks.org/merge-sort/?ref=header_search
     public void merge(int[] arr, int left, int middle, int right) {
         
         // Calculate sizes of subarrays
@@ -184,7 +186,8 @@ public class SortingAlgorithmsBenchmark {
     }
 
 
-    // Solution for MergeSort taken from: https://www.geeksforgeeks.org/merge-sort/?ref=header_search
+    // MERGE SORT
+    // Source: https://www.geeksforgeeks.org/merge-sort/?ref=header_search
     public void mergeSort(int[] arr, int left, int right) {
         
         // Base case - terminate recursive calls once left and right variables (indexes) are equal
@@ -204,7 +207,8 @@ public class SortingAlgorithmsBenchmark {
     }   
 
 
-    // Slightly modified version of Counting Sort found at: https://www.programiz.com/dsa/counting-sort
+    // COUNTING SORT
+    // Slightly modified version of algorithm found at: https://www.programiz.com/dsa/counting-sort
     public void countingSort(int[] arr, int n) {
         
         // Output array
@@ -263,7 +267,8 @@ public class SortingAlgorithmsBenchmark {
             System.out.printf("%-10s", sizeArray[i]);
         }
 
-        // For each sorting algorithm (string) iterate over an array of input sizes and pass them in as parameters to the benchmark()
+        // For each sorting algorithm iterate over an array of input sizes and pass them in as parameters to the benchmark() method
+        // Print sorting algorithm and its respective benchmark results appropriately formatted on one line
         for (String alg : algArray) {
             System.out.printf("%n%-20s", alg);
             
