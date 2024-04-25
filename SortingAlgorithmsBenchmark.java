@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class SortingAlgorithmsBenchmark {
     
     // Utility method that copies source array
@@ -38,8 +40,8 @@ public class SortingAlgorithmsBenchmark {
                 case "BubbleSort"     -> bubbleSort(arrCopy);
                 case "SelectionSort"  -> selectionSort(arrCopy);
                 case "InsertionSort"  -> insertionSort(arrCopy);                 
-                case "MergeSort"      -> mergeSort(arrCopy, 0, arrCopy.length-1);
-                case "BucketSort"     -> bucketSort(arrCopy, arrCopy.length);
+                case "MergeSort"      -> mergeSort(arrCopy, 0, n-1);
+                case "CountingSort"   -> countingSort(arrCopy, n);
                 default               -> {
                     return Double.NaN;
                 }
@@ -181,6 +183,7 @@ public class SortingAlgorithmsBenchmark {
         }
     }
 
+
     // Solution for MergeSort taken from: https://www.geeksforgeeks.org/merge-sort/?ref=header_search
     public void mergeSort(int[] arr, int left, int right) {
         
@@ -201,9 +204,47 @@ public class SortingAlgorithmsBenchmark {
     }   
 
 
-    public void bucketSort(int[] arr, int n) {
-  
-    }
+    // Slightly modified version of Counting Sort found at: https://www.programiz.com/dsa/counting-sort
+    public void countingSort(int[] arr, int n) {
+        
+        // Output array
+        int[] output = new int[n + 1];
+
+        // Find the largest element of the array
+        int max = 0;
+        for (int i = 0; i < n; i++) {
+            max = Math.max(max, arr[i]);
+        }
+
+        // Initialize the array of max+1 size and fill it with zeros so we can store frequency of each element (starting from 0)
+        int[] count = new int[max + 1];
+        for (int i = 0; i < max; i++) {
+            count[i] = 0;
+        }
+
+        // Store the count (frequency) of each element at their respective index in the 'count' array. Do this by incrementing the value
+        // of an element of count array at particular index. That index is determined by the value of an element of original array
+        for (int i = 0; i < n; i++) {
+            count[arr[i]]++;
+        }
+
+        // Store the cumulative sum of the elements in the count array - used to determine correct position of each element
+        // in the sorted array
+        for (int i = 1; i <= max; i++) {
+            count[i] += count[i - 1];
+        }
+
+        // Find the index of each element of the original array in count array, and place the elements in output array
+        for (int i = n - 1; i >= 0; i--) {
+            output[count[arr[i]] - 1] = arr[i];
+            count[arr[i]]--;
+        }
+
+        // Copy sorted elements from output array into original array
+        for (int i = 0; i < n; i++) {
+            arr[i] = output[i];
+        }
+    }   
     
     
     
@@ -213,7 +254,7 @@ public class SortingAlgorithmsBenchmark {
         // Array of input sizes
         int[] sizeArray = {100, 250, 500, 750, 1000, 1250, 2500, 3750, 5000, 6250, 7500, 8750, 10000};
         // Array of strings that represent sorting algorithms
-        String[] algArray = {"BubbleSort", "SelectionSort", "InsertionSort", "MergeSort", "BucketSort"};
+        String[] algArray = {"BubbleSort", "SelectionSort", "InsertionSort", "MergeSort", "CountingSort"};
 
         // Print string "SIZE" and each input size on one line
         // Explanation on how to format with printf() method found at: https://www.baeldung.com/java-printstream-printf
