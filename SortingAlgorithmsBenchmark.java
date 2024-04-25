@@ -17,7 +17,7 @@ public class SortingAlgorithmsBenchmark {
         return array;
     }
 
-    // Utility and Benchmark methods are slightly modified versions of Dr. Dominic Carr's benchmark example. Source code at:
+    // Utility and Benchmark methods are slightly modified versions from Dr. Dominic Carr's benchmark example. Source code at:
     // https://vlegalwaymayo.atu.ie/pluginfile.php/1183960/mod_resource/content/0/Main.java
     public double benchmark(int n, String sort) {
         // Initialize totalTime variable
@@ -39,7 +39,7 @@ public class SortingAlgorithmsBenchmark {
                 case "SelectionSort"  -> selectionSort(arrCopy);
                 case "InsertionSort"  -> insertionSort(arrCopy);                 
                 case "MergeSort"      -> mergeSort(arrCopy, 0, arrCopy.length-1);
-                case "RadixSort"      -> radixSort(arrCopy);
+                case "BucketSort"     -> bucketSort(arrCopy, arrCopy.length);
                 default               -> {
                     return Double.NaN;
                 }
@@ -154,8 +154,8 @@ public class SortingAlgorithmsBenchmark {
         // Initialize variable to track indexes of array that was originally passed in to merge() method
         int k = left;
 
-        // Keep iterating until either index reaches end of its subarray, compare values at given indexes of subarrays
-        // and insert smaller element into arr first (sorting and merging)
+        // Keep iterating until either index reaches end of its respective subarray, compare values at given indexes of 
+        // subarrays and insert smaller element into array at appropriate position 
         while (i < n1 && j < n2) {
             
             if (leftArr[i] <= rightArr[j]) {
@@ -168,7 +168,7 @@ public class SortingAlgorithmsBenchmark {
             k++;       
         }
 
-        // Insert any remaining elements from temporary subarrays - in case leftArr and rightArr were not the same size
+        // Insert any remaining elements from temporary subarrays to finish merging and sorting process
         while (i < n1) {
             arr[k] = leftArr[i];
             i++;
@@ -201,7 +201,7 @@ public class SortingAlgorithmsBenchmark {
     }   
 
 
-    public void radixSort(int[] arr) {
+    public void bucketSort(int[] arr, int n) {
   
     }
     
@@ -213,7 +213,7 @@ public class SortingAlgorithmsBenchmark {
         // Array of input sizes
         int[] sizeArray = {100, 250, 500, 750, 1000, 1250, 2500, 3750, 5000, 6250, 7500, 8750, 10000};
         // Array of strings that represent sorting algorithms
-        String[] algArray = {"BubbleSort", "SelectionSort", "InsertionSort", "MergeSort", "RadixSort"};
+        String[] algArray = {"BubbleSort", "SelectionSort", "InsertionSort", "MergeSort", "BucketSort"};
 
         // Print string "SIZE" and each input size on one line
         // Explanation on how to format with printf() method found at: https://www.baeldung.com/java-printstream-printf
