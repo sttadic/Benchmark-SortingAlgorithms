@@ -1,3 +1,6 @@
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class SortingAlgorithmsBenchmark {
     
     // Utility method that copies source array
@@ -252,31 +255,50 @@ public class SortingAlgorithmsBenchmark {
     
     
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         SortingAlgorithmsBenchmark b = new SortingAlgorithmsBenchmark();
+        // Instantiate FileWriter object and pass in the name of csv file to its constructor
+        FileWriter writer = new FileWriter("benchmark_results.csv");
 
         // Array of input sizes
         int[] sizeArray = {100, 250, 500, 750, 1000, 1250, 2500, 3750, 5000, 6250, 7500, 8750, 10000};
         // Array of strings that represent sorting algorithms
         String[] algArray = {"BubbleSort", "SelectionSort", "InsertionSort", "MergeSort", "CountingSort"};
 
-        // Print string "SIZE" and each input size on one line
+        // Print string "SIZE" and each input size on one line and write to a CSV file
         // Explanation on how to format with printf() method found at: https://www.baeldung.com/java-printstream-printf
         System.out.printf("%-20s", "SIZE");
+        writer.append("SIZE,");
         for (int i = 0; i < sizeArray.length; i++) {
             System.out.printf("%-10s", sizeArray[i]);
+            // Store each input size into a CSV adding a new line after last element of the array
+            if (i < sizeArray.length-1) {
+                writer.append(sizeArray[i] + ",");
+            } else writer.append(sizeArray[i] + "\n");
         }
-
+   
         // For each sorting algorithm iterate over an array of input sizes and pass them in as parameters to the benchmark() method
         // Print sorting algorithm and its respective benchmark results appropriately formatted on one line
         for (String alg : algArray) {
             System.out.printf("%n%-20s", alg);
+            // Write each algorithm name to a csv followed by a comma
+            writer.append(alg + ",");
             
-            for (int n : sizeArray) {
-                System.out.printf("%-10.3f", b.benchmark(n, alg));
+            for (int i = 0; i < sizeArray.length; i++) {
+                String benchResult = String.format("%.3f", b.benchmark(sizeArray[i], alg));
+                System.out.printf("%-10s", benchResult);
+
+                // Write results of a each benchmark to a .csv file
+                if (i < sizeArray.length-1) {
+                    writer.append(benchResult + ",");
+                } else writer.append(benchResult + "\n");
             }
         }
         System.out.println();
+
+        // Close the csv file
+        writer.flush();
+        writer.close();
     }
 
 }
