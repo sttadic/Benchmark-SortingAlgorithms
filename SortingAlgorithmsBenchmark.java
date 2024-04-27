@@ -193,7 +193,7 @@ public class SortingAlgorithmsBenchmark {
     // Source: https://www.geeksforgeeks.org/merge-sort/?ref=header_search
     public void mergeSort(int[] arr, int left, int right) {
         
-        // Base case - terminate recursive calls once left and right variables (indexes) are equal
+        // Base case - terminate recursive calls once left and right variables (indexes) are equal (only one element left)
         if (left < right) {
 
             // Calculate middle index in a way it prevents integer overflow
