@@ -214,40 +214,42 @@ public class SortingAlgorithmsBenchmark {
     // Slightly modified version of algorithm found at: https://www.programiz.com/dsa/counting-sort
     public void countingSort(int[] arr, int n) {
         
-        // Output array
+        // Initialize output array
         int[] output = new int[n + 1];
 
-        // Find the largest element of the array
+        // Find the largest element of the input array
         int max = 0;
         for (int i = 0; i < n; i++) {
             max = Math.max(max, arr[i]);
         }
 
-        // Initialize the array of max+1 size and fill it with zeros so we can store frequency of each element (starting from 0)
+        // Initialize the array of max+1 size, and fill it with zeros so we can store frequency of each element
         int[] count = new int[max + 1];
         for (int i = 0; i < max; i++) {
             count[i] = 0;
         }
 
         // Store the count (frequency) of each element at their respective index in the 'count' array. Do this by incrementing the value
-        // of an element of count array at particular index. That index is determined by the value of an element of original array
+        // of an element of count array at particular index. That index is determined by the value of an element of original input array
         for (int i = 0; i < n; i++) {
             count[arr[i]]++;
         }
 
-        // Store the cumulative sum of the elements in the count array - used to determine correct position of each element
-        // in the sorted array
+        // Store the cumulative sum of the elements in the count array to determine number of elements that are less or equal to the
+        // input elemets
         for (int i = 1; i <= max; i++) {
             count[i] += count[i - 1];
         }
 
-        // Find the index of each element of the original array in count array, and place the elements in output array
+        // Iterate over the input array in the reverse order, and store the element of the input array at the particular index of
+        // the output (sorted) array
         for (int i = n - 1; i >= 0; i--) {
             output[count[arr[i]] - 1] = arr[i];
+            // Decrement cumulative sum at index which is determined by the current element of the input array
             count[arr[i]]--;
         }
 
-        // Copy sorted elements from output array into original array
+        // Copy elements from sorted output array into original array
         for (int i = 0; i < n; i++) {
             arr[i] = output[i];
         }
