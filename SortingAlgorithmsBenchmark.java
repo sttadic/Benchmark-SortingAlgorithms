@@ -29,7 +29,7 @@ public class SortingAlgorithmsBenchmark {
         // Store randomly generated array of size n to arr variable
         int[] arr = randomArr(n);
 
-        // Perform 10 benchmarks for each sorting algorithm
+        // Perform 10 benchmarks for each sorting algorithm of size n
         for (int i = 0; i < 10; i++) {
 
             // Store the copy of the original array into an arrCopy so sorting algorithm always works on unsorted arrays
@@ -53,7 +53,7 @@ public class SortingAlgorithmsBenchmark {
             long endTime = System.nanoTime();
             // Calculate running time of sorting algorithm in milliseconds
             double elapsedTime = (endTime - startTime) / 1000000.0;
-            // Add elapsedTime to totalTime for each iteration
+            // Add runnning time to totalTime for each iteration
             totalTime += elapsedTime;
         }   
         // Return the average running time of an algorithm
@@ -82,7 +82,7 @@ public class SortingAlgorithmsBenchmark {
                 }
             }
             // Largest element is placed at the correct position, last index of the array, after each iteration.
-            // Therefore, decrement n so algorithm would exclude already sorted part of the array on each subsequent pass 
+            // Therefore, decrement n so inner loop excludes already sorted part of the array on each subsequent pass 
             n--;
         }
     }
@@ -193,7 +193,7 @@ public class SortingAlgorithmsBenchmark {
     // Source: https://www.geeksforgeeks.org/merge-sort/?ref=header_search
     public void mergeSort(int[] arr, int left, int right) {
         
-        // Base case - terminate recursive calls once left and right variables (indexes) are equal (only one element left)
+        // Base case - terminate recursive calls once left and right variables (indexes) are equal
         if (left < right) {
 
             // Calculate middle index in a way it prevents integer overflow
@@ -306,10 +306,9 @@ public class SortingAlgorithmsBenchmark {
         
         bench.init(sizeArray, algArray, w);
 
-         // Write all the data from the buffer to the csv file
+         // Write all data from the buffer to the csv file
          w.flush();
          // Close FileWriter object
          w.close();
     }
-
 }
