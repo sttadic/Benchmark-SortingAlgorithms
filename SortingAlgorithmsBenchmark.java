@@ -254,53 +254,62 @@ public class SortingAlgorithmsBenchmark {
             arr[i] = output[i];
         }
     }   
-    
-    
-    
-    public static void main(String[] args) throws IOException {
-        SortingAlgorithmsBenchmark b = new SortingAlgorithmsBenchmark();
-        // Instantiate FileWriter object and pass in the name of csv file to its constructor
-        FileWriter writer = new FileWriter("benchmark_results.csv");
 
-        // Array of input sizes
-        int[] sizeArray = {100, 250, 500, 750, 1000, 1250, 2500, 3750, 5000, 6250, 7500, 8750, 10000};
-        // Array of strings that represent sorting algorithms
-        String[] algArray = {"BubbleSort", "SelectionSort", "InsertionSort", "MergeSort", "CountingSort"};
 
-        // Print string "SIZE" and each input size on one line and write to a CSV file
+
+    public void init(int[] sizeArr, String[] algArr, FileWriter writer) throws IOException {
+        
+        // Print string "SIZE" and each input size on one line by iterating over sizeArr, write to a CSV file
         // Explanation on how to format with printf() method found at: https://www.baeldung.com/java-printstream-printf
         System.out.printf("%-20s", "SIZE");
         writer.append("SIZE,");
-        for (int i = 0; i < sizeArray.length; i++) {
-            System.out.printf("%-10s", sizeArray[i]);
-            // Store each input size into a CSV adding a new line after last element of the array
-            if (i < sizeArray.length-1) {
-                writer.append(sizeArray[i] + ",");
-            } else writer.append(sizeArray[i] + "\n");
+        for (int i = 0; i < sizeArr.length; i++) {
+            System.out.printf("%-10s", sizeArr[i]);
+            // Store each input size into a CSV adding a new line only after a last element of the array
+            if (i < sizeArr.length-1) {
+                writer.append(sizeArr[i] + ",");
+            } else writer.append(sizeArr[i] + "\n");
         }
    
         // For each sorting algorithm iterate over an array of input sizes and pass them in as parameters to the benchmark() method
         // Print sorting algorithm and its respective benchmark results appropriately formatted on one line
-        for (String alg : algArray) {
+        for (String alg : algArr) {
             System.out.printf("%n%-20s", alg);
             // Write each algorithm name to a csv followed by a comma
             writer.append(alg + ",");
             
-            for (int i = 0; i < sizeArray.length; i++) {
-                String benchResult = String.format("%.3f", b.benchmark(sizeArray[i], alg));
+            for (int i = 0; i < sizeArr.length; i++) {
+                String benchResult = String.format("%.3f", benchmark(sizeArr[i], alg));
                 System.out.printf("%-10s", benchResult);
 
                 // Write results of a each benchmark to a .csv file
-                if (i < sizeArray.length-1) {
+                if (i < sizeArr.length-1) {
                     writer.append(benchResult + ",");
                 } else writer.append(benchResult + "\n");
             }
         }
         System.out.println();
+    }
+    
+    
+    
+    public static void main(String[] args) throws IOException {
+        
+        SortingAlgorithmsBenchmark bench = new SortingAlgorithmsBenchmark();
+        // Instantiate FileWriter object and pass the name of csv file into its constructor
+        FileWriter w = new FileWriter("benchmark_results.csv");
+        
+        // Declare an array of input sizes
+        int[] sizeArray = {100, 250, 500, 750, 1000, 1250, 2500, 3750, 5000, 6250, 7500, 8750, 10000};
+        // Array of strings that represent sorting algorithms
+        String[] algArray = {"BubbleSort", "SelectionSort", "InsertionSort", "MergeSort", "CountingSort"};
+        
+        bench.init(sizeArray, algArray, w);
 
-        // Close the csv file
-        writer.flush();
-        writer.close();
+         // Write all the data from the buffer to the csv file
+         w.flush();
+         // Close FileWriter object
+         w.close();
     }
 
 }
