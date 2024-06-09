@@ -296,8 +296,13 @@ public class SortingAlgorithmsBenchmark {
     public static void main(String[] args) throws IOException {
         
         SortingAlgorithmsBenchmark bench = new SortingAlgorithmsBenchmark();
-        // Instantiate FileWriter object and pass the name of csv file into its constructor
-        FileWriter w = new FileWriter("benchmark_results.csv");
+        // Instantiate FileWriter object and pass the name of csv file into its constructor and handle exceptions
+        FileWriter w = null;
+        try {
+            w = new FileWriter("benchmark_results.csv");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         
         // Declare an array of input sizes
         int[] sizeArray = {100, 250, 500, 750, 1000, 1250, 2500, 3750, 5000, 6250, 7500, 8750, 10000};
