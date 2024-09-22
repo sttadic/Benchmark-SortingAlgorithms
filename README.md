@@ -1,5 +1,12 @@
 # Benchmark-SortingAlgorithms
 
+## Sorting algorithms
+- Bubble Sort
+- Selection Sort
+- Insertion Sort
+- Merge Sort
+- Counting Sort
+
 ## Description
 The application is entirely implemented within a single class consisting of benchmark method, utility methods, and sorting algorithms. To automate the process of benchmarking, two arguments are passed into the benchmark method, one specifying the input size, and the other defining the actual sorting algorithm to be tested. Arrays of input sizes and sorting algorithms are declared within the main method.
 
